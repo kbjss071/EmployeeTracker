@@ -33,7 +33,7 @@ function mainPrompt(){
                 "View All Roles",
                 "Add Roles",
                 "View All Departments",
-                "Add department",
+                "Add Department",
                 "Update Employee Managers",
                 "View Employees by Manager",
                 "View Employees by Department",
@@ -44,7 +44,8 @@ function mainPrompt(){
     ];
 
     inquirer.prompt(question).then(({main}) => {
-        console.log(main);
+        // console.log()
+        // console.log(main=="Add department");
         if (main == "View All Employees"){
             viewEmployee();
         } else if(main == "Add Employee"){
@@ -84,15 +85,12 @@ function viewEmployee() {
     LEFT JOIN employees m on m.id = employees.manager_id;`
 
     db.query(sql, (err, res)=> {
-        if (err){
-            console.log(err);
-        }
+        if (err) throw err;
         console.log(`\n`);
         console.table(res);
-        console.log(`\n`);
+        mainPrompt();
     })
     
-    mainPrompt();
 }
 
 function addEmployee() {
@@ -122,17 +120,21 @@ function addEmployee() {
     ]
     inquirer.prompt(question).then((res)=>{
         let sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-        VALUES (${res.first_name}, ${res.last_name}, ${res.role}, ${res.manager})`
+        VALUES (?, ?, ?, ?)`
 
-        db.query(sql, (err, res)=>{
-            console.log("======Employee Added=====")
-            console.table(res);
-            console.log("\n");
+        const params = [
+            res.first_name, res.last_name, res.role, res.manager            
+        ]
+
+        db.query(sql, params ,(err, res)=>{
+            if(err) throw err;
+            viewEmployee();
+
+            mainPrompt();
         })
 
     })
 
-    mainPrompt();
 }
 
 function updateEmployee() {
@@ -188,17 +190,17 @@ function viewRole() {
         }
         console.log(`\n`);
         console.table(res);
-        console.log(`\n`);
+        mainPrompt();
     })
 
-    mainPrompt();
 }
+//Word done
 function addRole() {
     const question = [
         {
             name: "title",
             type: "input",
-            message: "Please enter a tile of new role."
+            message: "Please enter a title of new role."
         },
         {
             name: "salary",
@@ -214,17 +216,19 @@ function addRole() {
 
     inquirer.prompt(question).then((res)=>{
         let sql = `INSERT INTO role_table(title, salary, department_id)
-        VALUES (${res.title}, ${res.salary}, ${res.department_id});`
+        VALUES (?, ?, ?);`
 
-        db.query(sql, (err, res)=>{
-            console.table(res);
+        let params = [res.title, res.salary, res.department_id];
+
+        db.query(sql, params, (err, res)=>{
+            viewRole();
         })
 
         // let sql = `SELECT role.id, role.title, department.department_name, role.salary FROM role_table role
         // JOIN department on department.id = role.department_id;`
-
+        
+        mainPrompt();
     })
-    mainPrompt();
 }
 //Word done
 function viewDepartment() {
@@ -236,10 +240,11 @@ function viewDepartment() {
         }
         console.log(`\n`);
         console.table(res);
-        console.log(`\n`);
+        mainPrompt();
     })
-    mainPrompt();
 }
+
+//Word done
 function addDepartment() {
     const question = [
         {
@@ -247,17 +252,18 @@ function addDepartment() {
             type: "input",
             message: "Please enter a new department name."
         }
-    ]
+    ];
     inquirer.prompt(question).then((res)=>{
-        let sql = `INSERT INTO department(department_name) VALUES (res.department_name);`
+        let sql = `INSERT INTO department(department_name) VALUES (?)`;
 
-        db.query(sql, (err, res) => {
-            console.table(res);
+        db.query(sql, res.department_name ,(err, res) => {
+            if(err) throw err;
+            viewDepartment();
         })
 
+        mainPrompt();
     })
 
-    mainPrompt();
 }
 
 function updateManager(){
@@ -307,6 +313,26 @@ function deleteKey(){
 function viewTotalSalaryByDepartment(){
     let sql = `SELECT FROM`
     mainPrompt();
+}
+
+function selectManager(choices){
+    inquirer.prompt([{
+        type: "list",
+        name: "department",
+        message: "Which department would you choose?",
+        choices: choices
+    }]).then(function (respond){
+        console.log()
+    })
+
+}
+
+function selectRole(choices){
+    inquirer
+}
+
+function selectDepartment(choices){
+
 }
 
 mainPrompt();

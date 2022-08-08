@@ -1,6 +1,7 @@
 # EmployeeTracker
 
 ## Link to a walkthrough video
+https://drive.google.com/file/d/1ZunGh5sElLy5mTjeQ2qde2QO1AboC30P/view
 
 ## To-do List
 - When the application is initiated, the user should be presented with the following options:
@@ -22,3 +23,9 @@
 - Installed necessary npm libraries.
 - Initialized database and set seeds data into the database.
 - Set up functions to prompt user to select and built the functions to perform properly.
+    - `View employees, roles, departments` to see what is in the database.
+    - `Add employees, roles, departments` to add new employee, role, and department.
+    - `Update Employee's manager and role` to update employee's manager or role.
+    - `View employees by department and manager` to view employees in each department or under manager.
+    - `Delete department, role, and employee` to delete department, role, and employee.
+    - `View the total budget by department` to sum up all employee's salary under each department.
